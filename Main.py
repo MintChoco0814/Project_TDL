@@ -35,10 +35,15 @@ class MainWindow(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-
         # 화면 중간으로 오게하기
-if __name__ == '__main__':
+
+
+
+def main():
 
     app = QApplication(sys.argv)
     ex = MainWindow()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
