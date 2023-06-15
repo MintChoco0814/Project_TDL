@@ -1,6 +1,11 @@
 import sys
-from PyQt5.QtWidgets import *
+
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+
+from close_event import close_Event
+from key_event import keyEvent
+from window_center import widget_center
 
 
 class MainWindow(QMainWindow):
@@ -8,27 +13,25 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-
-
+        # 두 번째 나타내는 버튼 만들기
         self.button = QPushButton('새로운 창', self)
         self.button.clicked.connect(self.dialog_open)
-        self.button.setGeometry(10, 10, 200, 50)
+        self.button.setGeometry(10, 10, 50, 50) # x, y, h, w
 
         self.dialog = QDialog()
 
     def initUI(self):
+        # 스테이터스 바에 날짜, 시간 표시
+        datetime = QDateTime.currentDateTime()
+        self.statusBar().showMessage(f"{datetime.toString(Qt.DefaultLocaleLongDate)}")
+
         self.setWindowTitle("To Do List")
         self.resize(500, 500)
         self.windowCenter()
 
-        self.button = QPushButton('새로운 창', self)
-        self.button.clicked.connect(self.dialog_open)
-        self.button.setGeometry(10, 10, 200, 50)
-
-        self.dialog = QDialog()
-
-
-
+        # self.button = QPushButton('새로운 창', self)
+        # self.button.clicked.connect(self.dialog_open)
+        # self.button.setGeometry(10, 10, 200, 50)
 
     def dialog_open(self):
 
@@ -36,6 +39,7 @@ class MainWindow(QMainWindow):
         btnDialog.move(100, 100)
         btnDialog.clicked.connect(self.dialog_close)
 
+        # 두 번째 창 만들기
         self.dialog.setWindowTitle("Sub Window")
         self.dialog.setWindowModality(Qt.ApplicationModal)
         self.dialog.resize(300, 200)
@@ -43,38 +47,27 @@ class MainWindow(QMainWindow):
         self.dialog.show()
 
     def dialog_close(self):
+        # 두 번째 창 닫기.
         self.dialog.close()
 
-
-    def closeEvent(self, event):
-
-        reply = QMessageBox.question(self, 'Message', '프로그램을 종료하시겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-
-        if reply == QMessageBox.Yes: event.accept()
-        else: event.ignore()
-
+    def closeEvent(self, e):
+        close_Event(self, e)
 
     def keyPressEvent(self, event):
-
-        if event.modifiers() & Qt.ControlModifier:
-            if event.key() == Qt.Key_W:
-                self.close() # 화면 닫기 단축기 ctrl + w
+        # 화면 닫기 단축기 ctrl + w
+        keyEvent(self, event)
 
     def windowCenter(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
         # 화면 중간으로 오게하기
-
+        widget_center(self)
 
 
 def main():
-
     app = QApplication(sys.argv)
-    ex = MainWindow()
-    ex.show()
+    mainWindow = MainWindow()
+    mainWindow.show()
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()
