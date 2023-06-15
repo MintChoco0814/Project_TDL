@@ -29,10 +29,6 @@ class MainWindow(QMainWindow):
         self.resize(500, 500)
         self.windowCenter()
 
-        # self.button = QPushButton('새로운 창', self)
-        # self.button.clicked.connect(self.dialog_open)
-        # self.button.setGeometry(10, 10, 200, 50)
-
     def dialog_open(self):
 
         btnDialog = QPushButton("확인", self.dialog)
