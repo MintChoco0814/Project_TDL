@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         # 두 번째 나타내는 버튼 만들기
         self.button = QPushButton('새로운 창', self)
         self.button.clicked.connect(self.dialog_open)
-        self.button.setGeometry(10, 10, 50, 50) # x, y, h, w
+        self.button.setGeometry(10, 10, 50, 50)  # x, y, h, w
 
         self.dialog = QDialog()
 
@@ -29,8 +29,27 @@ class MainWindow(QMainWindow):
         self.resize(500, 500)
         self.windowCenter()
 
-    def dialog_open(self):
+        # Create a central widget and a layout for it
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
 
+        # Create a checkbox button
+        self.button_checkbox = QPushButton('추가하기', self)
+        self.button_checkbox.clicked.connect(self.create_checkbox)
+
+        # Add the button to the layout
+        layout.addWidget(self.button_checkbox)
+
+        # Set the central widget and layout
+        self.setCentralWidget(central_widget)
+
+    def create_checkbox(self):
+        text, ok = QInputDialog.getText(self, 'Checkbox Text', 'Enter checkbox Text: ')
+        if ok and text:
+            checkbox = QCheckBox(text, self)
+            self.centralWidget().layout().addWidget(checkbox)
+
+    def dialog_open(self):
         btnDialog = QPushButton("확인", self.dialog)
         btnDialog.move(100, 100)
         btnDialog.clicked.connect(self.dialog_close)
