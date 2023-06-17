@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 from close_event import close_Event
 from key_event import keyEvent
 from window_center import widget_center
-from create_CheckBox import checkbox_create
+
 
 class MainWindow(QMainWindow):
 
@@ -40,30 +40,41 @@ class MainWindow(QMainWindow):
         # Add the button to the layout
         layout.addWidget(self.button_checkbox)
 
+        # delete checkboxes
+        self.del_btn = QPushButton('Del CheckBox', self)
+        self.del_btn.clicked.connect(self.delete_checkbox)
+        layout.addWidget(self.del_btn)
+
+        # Create a list to store the checkboxes
+        self.checkboxes = []
+
         # Set the central widget and layout
         self.setCentralWidget(central_widget)
 
     def create_checkbox(self):
-        checkbox_create(self)
+        text, ok = QInputDialog.getText(self, 'Checkbox Test', 'Enter Checkbox Text: ')
+        if ok and text:
+            checkbox = QCheckBox(text, self)
+            self.checkboxes.append(checkbox)
+            self.centralWidget().layout().addWidget(checkbox)
 
-    # def dialog_open(self):
-    #     btnDialog = QPushButton("확인", self.dialog)
-    #     btnDialog.move(100, 100)
-    #     btnDialog.clicked.connect(self.dialog_close)
-    #
-    #     # 두 번째 창 만들기
-    #     self.dialog.setWindowTitle("Sub Window")
-    #     self.dialog.setWindowModality(Qt.ApplicationModal)
-    #     self.dialog.resize(300, 200)
-    #     self.windowCenter()
-    #     self.dialog.show()
+    def delete_checkbox(self):
+        checkboxes_to_delete = []
+        for checkbox in self.checkboxes:
+            if checkbox.isChecked():
+                checkboxes_to_delete.append(checkbox)
 
-    # def dialog_close(self):
-    #     # 두 번째 창 닫기.
-    #     self.dialog.close()
+        for checkbox in checkboxes_to_delete:
+            self.checkboxes.remove(checkbox)
+            checkbox.setParent(None)
 
     def closeEvent(self, e):
+
         close_Event(self, e)
+
+        for checkbox in self.checkboxes:
+            checkbox.setParent(None)
+        e.accept()
 
     def keyPressEvent(self, event):
         # 화면 닫기 단축기 ctrl + w
