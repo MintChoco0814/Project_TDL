@@ -13,12 +13,6 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-        # 두 번째 나타내는 버튼 만들기
-        # self.button = QPushButton('새로운 창', self)
-        # self.button.clicked.connect(self.dialog_open)
-        # self.button.setGeometry(10, 10, 50, 50)  # x, y, h, w
-        #
-        # self.dialog = QDialog()
 
     def initUI(self):
         # 스테이터스 바에 날짜, 시간 표시
